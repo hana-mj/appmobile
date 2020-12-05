@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>Line Chart Template</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="../common/css/app.min.css">
+<script src="../common/js/jQuery2.0.2.min.js"></script>
+<script src="../common/js/d3.v3.min.js"></script>
+<script src="../common/js/main.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    reportObj.init({
+        graphType: "line",
+        jsonURL: "http://127.0.0.1:3000/mesures",
+        line: {
+            periods : [10, 30]
+        },
+        axis: {
+            xAxisIndex: "date",
+            yAxisIndex: "total"
+        }
+    });
+});
+</script>
+
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+<nav class="main-menu">
+<a href="#">Something</a>
+<a href="#">Something</a>
+<a href="#">Something</a>
+</nav><!--#main-menu-->
+
+<header>
+<div class="main-menu-button main-menu-button-left"><a class="left-arrow">&nbsp;</a></div>
+<div class="main-menu-button main-menu-button-right"><a class="gear">&nbsp;</a></div>
+<h1>Sales Report</h1>
+</header>
+
+<div class="app-content">
+
+<div class="detail-view-header">
+    <div class="content">
+        <h1>Sales</h1>
+    </div><!--.content-->
+</div><!--.detail-view-header-->
+
+<section class="border-bottom">
+  <div class="content padding-bottom-gutter">
+    <h3>Show Sales From</h3>
+    <div id="graph-data-select"></div>
+  </div>
+</section>
+
+<section>
+        <div class="card-body">
+                <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                  <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 328px;" width="328" height="250" class="chartjs-render-monitor"></canvas>
+                </div>
+              </div>
+</section>
+
+</div><!--#app-content-->
+</div><!--#app-wrapper-->
+<script src="Chart.min.js"></script>
+<script src="Chart.js"></script>
+<script src="Chart.bundle.min.js"></script>
+<script>
+
+
+        function fixdata(vlabels, vdata){
+        
+        
+        
+        
+            var areaChartData = {
+              labels  : vlabels,
+              datasets: [
+                {
+                  label               : 'Digital Goods',
+                  backgroundColor     : 'rgba(60,141,188,0.9)',
+                  borderColor         : 'rgba(60,141,188,0.8)',
+                  pointRadius          : false,
+                  pointColor          : '#3b8bba',
+                  pointStrokeColor    : 'rgba(60,141,188,1)',
+                  pointHighlightFill  : '#fff',
+                  pointHighlightStroke: 'rgba(60,141,188,1)',
+                  data                : vdata
+                },
+                {
+                  label               : 'Electronics',
+                  backgroundColor     : 'rgba(210, 214, 222, 1)',
+                  borderColor         : 'rgba(210, 214, 222, 1)',
+                  pointRadius         : false,
+                  pointColor          : 'rgba(210, 214, 222, 1)',
+                  pointStrokeColor    : '#c1c7d1',
+                  pointHighlightFill  : '#fff',
+                  pointHighlightStroke: 'rgba(220,220,220,1)',
+                  data                : vdata
+                },
+              ]
+            }
+        
+            var areaChartOptions = {
+              maintainAspectRatio : false,
+              responsive : true,
+              legend: {
+                display: false
+              },
+              scales: {
+                xAxes: [{
+                  gridLines : {
+                    display : false,
+                  }
+                }],
+                yAxes: [{
+                  gridLines : {
+                    display : false,
+                  }
+                }]
+              }
+            }
+        
+            // This will get the first returned node in the jQuery collection.
+        
+        
+            //-------------
+            //- LINE CHART -
+            //--------------
+            var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+            var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
+            var lineChartData = jQuery.extend(true, {}, areaChartData)
+            lineChartData.datasets[0].fill = false;
+            lineChartData.datasets[1].fill = false;
+            lineChartOptions.datasetFill = false
+        
+            var lineChart = new Chart(lineChartCanvas, { 
+              type: 'line',
+              data: lineChartData, 
+              options: lineChartOptions
+            })
+        
+            //-------------
+            //- DONUT CHART -
+            //-------------
+        
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+         
+        
+            //-------------
+            //- PIE CHART -
+            //-------------
+            // Get context with jQuery - using jQuery's .get() method.
+        
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+        
+        
+            //-------------
+            //- BAR CHART -
+           
+        
+            //---------------------
+            //- STACKED BAR CHART -
+            //---------------------
+        
+        
+        
+        }
+        
+        
+        
+        var vlabels = [];
+        var vdata = [];
+               
+                // Create a request variable and assign a new XMLHttpRequest object to it.
+                var request = new XMLHttpRequest()
+            
+            // Open a new connection, using the GET request on the URL endpoint
+            request.open('GET', 'http://127.0.0.1:3000/mesures', true)
+            
+            request.onload = function() {
+            // Begin accessing JSON data here
+            
+            // Begin accessing JSON data here
+            var data = JSON.parse(this.response)
+           
+            
+            console.log(data);
+             j =  0;
+            data.forEach(i => {
+            
+        
+             vlabels[j] = i.createdAt;
+             vdata[j] = parseInt(i.valeur);
+            j = j +  1;
+        
+            
+            })
+        
+            fixdata(vlabels,vdata);
+            
+            
+            }
+            
+            // Send request
+            request.send();
+                
+        
+        
+        
+        
+        
+        </script>
+</body>
+</html>
